@@ -23,6 +23,8 @@ use BotMan\Drivers\Telegram\Exceptions\TelegramException;
 class TelegramDriver extends HttpDriver
 {
     const DRIVER_NAME = 'Telegram';
+    
+    const API_URL = 'https://api.telegram.org/bot';
 
     protected $endpoint = 'sendMessage';
 
@@ -50,7 +52,7 @@ class TelegramDriver extends HttpDriver
             'user_id' => $matchingMessage->getSender(),
         ];
 
-        $response = $this->http->post('https://api.telegram.org/bot'.$this->config->get('token').'/getChatMember',
+        $response = $this->http->post(self::API_URL.$this->config->get('token').'/getChatMember',
             [], $parameters);
 
         $responseData = json_decode($response->getContent(), true);
@@ -156,8 +158,6 @@ class TelegramDriver extends HttpDriver
 
     /**
      * Load Telegram messages.
-     *
-     * @return array
      */
     public function loadMessages()
     {
@@ -197,7 +197,7 @@ class TelegramDriver extends HttpDriver
             'action' => 'typing',
         ];
 
-        return $this->http->post('https://api.telegram.org/bot'.$this->config->get('token').'/sendChatAction', [],
+        return $this->http->post(self::API_URL.$this->config->get('token').'/sendChatAction', [],
             $parameters);
     }
 
@@ -237,7 +237,7 @@ class TelegramDriver extends HttpDriver
             'inline_keyboard' => [],
         ];
 
-        return $this->http->post('https://api.telegram.org/bot'.$this->config->get('token').'/editMessageReplyMarkup',
+        return $this->http->post(self::API_URL.$this->config->get('token').'/editMessageReplyMarkup',
             [], $parameters);
     }
 
@@ -308,7 +308,7 @@ class TelegramDriver extends HttpDriver
      */
     public function sendPayload($payload)
     {
-        return $this->http->post('https://api.telegram.org/bot'.$this->config->get('token').'/'.$this->endpoint,
+        return $this->http->post(self::API_URL.$this->config->get('token').'/'.$this->endpoint,
             [], $payload);
     }
 
@@ -334,7 +334,7 @@ class TelegramDriver extends HttpDriver
             'chat_id' => $matchingMessage->getRecipient(),
         ], $parameters);
 
-        return $this->http->post('https://api.telegram.org/bot'.$this->config->get('token').'/'.$endpoint, [],
+        return $this->http->post(self::API_URL.$this->config->get('token').'/'.$endpoint, [],
             $parameters);
     }
 }
